@@ -1,5 +1,6 @@
 frames 100
 basename simple
+ambient 200 200 200
 push
 move 250 250 0
 scale 2 2 2 bigenator

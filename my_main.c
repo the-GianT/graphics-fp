@@ -66,7 +66,7 @@
   to some default value, and print out a message
   with the name being used.
   ====================*/
-void first_pass() {
+void first_pass(color *ambient) {
   //in order to use name and num_frames throughout
   //they must be extern variables
   char varied; // acts as a boolean that tells whether vary has been called
@@ -102,6 +102,17 @@ void first_pass() {
 	varied = 't'; // set to true
 	// printf("varied: %c\n", varied);
 	break;
+      case AMBIENT:
+	printf("Ambient: %6.2f %6.2f %6.2f\n",
+	       op[i].op.ambient.c[0],
+	       op[i].op.ambient.c[1],
+	       op[i].op.ambient.c[2]);
+	ambient.red = op[i].op.ambient.c[0];
+	ambient.green = op[i].op.ambient.c[1];
+	ambient.blue = op[i].op.ambient.c[2];
+	printf("ambient.red: %lf\n", ambient.red);
+	printf("ambient.green: %lf\n", ambient.green);
+	printf("ambient.blue: %lf\n", ambient.blue);
       }
   }
   if (varied && num_frames <= 1) {
@@ -257,12 +268,8 @@ void my_main() {
   double dreflect[3];
   double sreflect[3];
 
-  first_pass();
-
   struct vary_node *vary[num_frames];
   struct vary_node *dummy;
-  
-  second_pass(vary);
 
   ambient.red = 50;
   ambient.green = 50;
@@ -300,6 +307,9 @@ void my_main() {
   g.green = 0;
   g.blue = 0;
 
+  first_pass(ambient);
+  second_pass(vary);
+
   for (j = 0; j < num_frames; j++) {
 
     // Set knob values in symbol table
@@ -322,12 +332,6 @@ void my_main() {
 		   op[i].op.light.p->name,
 		   op[i].op.light.c[0], op[i].op.light.c[1],
 		   op[i].op.light.c[2]);
-	    break;
-	  case AMBIENT:
-	    printf("Ambient: %6.2f %6.2f %6.2f\n",
-		   op[i].op.ambient.c[0],
-		   op[i].op.ambient.c[1],
-		   op[i].op.ambient.c[2]);
 	    break;
 
 	  case CONSTANTS:
