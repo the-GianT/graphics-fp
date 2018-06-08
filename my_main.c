@@ -89,8 +89,8 @@ void first_pass(color *ambient) {
       case BASENAME:
 	strncpy(name, op[i].op.basename.p->name, sizeof(name));
 	name[sizeof(name) * sizeof(char) - 1] = '\0';
-	// printf("Basename: \"%s\"\n", name);
-	// print_symtab();
+	printf("Basename: \"%s\"\n", name);
+	print_symtab();
       case VARY:
 	/*
 	printf("Vary: %4.0f %4.0f, %4.0f %4.0f\n",
@@ -107,12 +107,12 @@ void first_pass(color *ambient) {
 	       op[i].op.ambient.c[0],
 	       op[i].op.ambient.c[1],
 	       op[i].op.ambient.c[2]);
-	ambient.red = op[i].op.ambient.c[0];
-	ambient.green = op[i].op.ambient.c[1];
-	ambient.blue = op[i].op.ambient.c[2];
-	printf("ambient.red: %lf\n", ambient.red);
-	printf("ambient.green: %lf\n", ambient.green);
-	printf("ambient.blue: %lf\n", ambient.blue);
+	ambient->red = op[i].op.ambient.c[0];
+	ambient->green = op[i].op.ambient.c[1];
+	ambient->blue = op[i].op.ambient.c[2];
+	printf("ambient->red: %d\n", ambient->red);
+	printf("ambient->green: %d\n", ambient->green);
+	printf("ambient->blue: %d\n", ambient->blue);
       }
   }
   if (varied && num_frames <= 1) {
@@ -261,7 +261,7 @@ void my_main() {
   double theta;
 
   //Lighting values here for easy access
-  color ambient;
+  color *ambient;
   double light[2][3];
   double view[3];
   double areflect[3];
@@ -271,9 +271,10 @@ void my_main() {
   struct vary_node *vary[num_frames];
   struct vary_node *dummy;
 
-  ambient.red = 50;
-  ambient.green = 50;
-  ambient.blue = 50;
+  ambient = (color *)malloc(sizeof(color) * 1);
+  ambient->red = 50;
+  ambient->green = 50;
+  ambient->blue = 50;
 
   light[LOCATION][0] = 0.5;
   light[LOCATION][1] = 0.75;
@@ -318,6 +319,7 @@ void my_main() {
     dummy = vary[j];
     
     while (dummy) {
+      print_symtab();
       set_value(lookup_symbol(dummy->name), dummy->value);
       dummy = dummy->next;
     }
@@ -368,7 +370,7 @@ void my_main() {
 		       op[i].op.sphere.r, step_3d);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, ambient, areflect, dreflect, sreflect);
+			  view, light, *ambient, areflect, dreflect, sreflect);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -392,7 +394,7 @@ void my_main() {
 		      op[i].op.torus.r0, op[i].op.torus.r1, step_3d);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, ambient, areflect, dreflect, sreflect);
+			  view, light, *ambient, areflect, dreflect, sreflect);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -421,7 +423,7 @@ void my_main() {
 		    op[i].op.box.d1[2]);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, ambient, areflect, dreflect, sreflect);
+			  view, light, *ambient, areflect, dreflect, sreflect);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -589,6 +591,7 @@ void my_main() {
   }
   free_matrix(tmp);
   free_stack(systems);
+  free(ambient);
 
   // Free all the nodes in the knob table
   for (j = 0; j < num_frames; j++) {
