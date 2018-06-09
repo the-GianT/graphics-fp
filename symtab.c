@@ -116,9 +116,8 @@ SYMTAB *lookup_symbol(char *name)
   int i;
   for (i=0;i<lastsym;i++)
     {
-      printf("i: %d\n", i);
+      // printf("i: %d\n", i);
       if (!strcmp(name,symtab[i].name))
-      // if (!strcmp("bluh", symtab[i].name))
         {
           return (SYMTAB *) &(symtab[i]);
         }

@@ -89,8 +89,8 @@ void first_pass(color *ambient) {
       case BASENAME:
 	strncpy(name, op[i].op.basename.p->name, sizeof(name));
 	name[sizeof(name) * sizeof(char) - 1] = '\0';
-	printf("Basename: \"%s\"\n", name);
-	print_symtab();
+	// printf("Basename: \"%s\"\n", name);
+	// print_symtab();
       case VARY:
 	/*
 	printf("Vary: %4.0f %4.0f, %4.0f %4.0f\n",
@@ -103,16 +103,18 @@ void first_pass(color *ambient) {
 	// printf("varied: %c\n", varied);
 	break;
       case AMBIENT:
+	/*
 	printf("Ambient: %6.2f %6.2f %6.2f\n",
 	       op[i].op.ambient.c[0],
 	       op[i].op.ambient.c[1],
 	       op[i].op.ambient.c[2]);
+	*/
 	ambient->red = op[i].op.ambient.c[0];
 	ambient->green = op[i].op.ambient.c[1];
 	ambient->blue = op[i].op.ambient.c[2];
-	printf("ambient->red: %d\n", ambient->red);
-	printf("ambient->green: %d\n", ambient->green);
-	printf("ambient->blue: %d\n", ambient->blue);
+	// printf("ambient->red: %d\n", ambient->red);
+	// printf("ambient->green: %d\n", ambient->green);
+	// printf("ambient->blue: %d\n", ambient->blue);
       }
   }
   if (varied && num_frames <= 1) {
@@ -140,15 +142,21 @@ void first_pass(color *ambient) {
   vary_node corresponding to the given knob with the
   appropirate value.
   ====================*/
-// struct vary_node ** second_pass() {
-void second_pass(struct vary_node ** vary)
-{
+struct vary_node ** second_pass() {
+// void second_pass(struct vary_node ** vary)
+// {
+  struct vary_node **vary;
   int i, j;
+  
+  vary = (struct vary_node **)calloc(num_frames, sizeof(struct vary_node *));
 
+  /*
   // initialize all frames to null
   for (i = 0; i < num_frames; i++) {
     vary[i] = NULL;
+    // printf("vary[i]: %p\n", vary[i]);
   }
+  */
 
   for (i=0;i<lastop;i++) {
     double jump; // number by which to incremement the knob for each frame
@@ -178,6 +186,7 @@ void second_pass(struct vary_node ** vary)
 	for (j = op[i].op.vary.start_frame; j < op[i].op.vary.end_frame; j++) {
 	  new = (struct vary_node *)malloc(sizeof(struct vary_node));
 	  new->name = op[i].op.vary.p->name;
+	  // printf("new->name: \"%s\"\n", new->name);
 	  new->value = value;
 	  new->next = vary[j];
 	  vary[j] = new;
@@ -185,12 +194,15 @@ void second_pass(struct vary_node ** vary)
 	}
 	new = (struct vary_node *)malloc(sizeof(struct vary_node));
 	new->name = op[i].op.vary.p->name;
+	// printf("new->name: \"%s\"\n", new->name);
 	new->value = op[i].op.vary.end_val;
 	new->next = vary[j];
 	vary[j] = new;
 	break;
       }
   }
+  // printf("vary[0]->name: \"%s\"\n", vary[0]->name);
+  return vary;
 }
 
 /*======== void print_knobs() ==========
@@ -268,7 +280,8 @@ void my_main() {
   double dreflect[3];
   double sreflect[3];
 
-  struct vary_node *vary[num_frames];
+  // struct vary_node *vary[num_frames];
+  struct vary_node **vary;
   struct vary_node *dummy;
 
   ambient = (color *)malloc(sizeof(color) * 1);
@@ -309,7 +322,8 @@ void my_main() {
   g.blue = 0;
 
   first_pass(ambient);
-  second_pass(vary);
+  vary = second_pass();
+  // printf("vary[0]->name: \"%s\"\n", vary[0]->name);
 
   for (j = 0; j < num_frames; j++) {
 
@@ -319,7 +333,9 @@ void my_main() {
     dummy = vary[j];
     
     while (dummy) {
-      print_symtab();
+      // print_symtab();
+      // printf("dummy->name: \"%s\"\n", dummy->name);
+      // printf("dummy->value: %lf\n", dummy->value);
       set_value(lookup_symbol(dummy->name), dummy->value);
       dummy = dummy->next;
     }
@@ -602,6 +618,7 @@ void my_main() {
       dummy = lead_dummy;
     }
   }
+  free(vary);
   
   make_animation(name);
 }

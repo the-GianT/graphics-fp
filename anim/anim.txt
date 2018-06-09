@@ -1,0 +1,3 @@
+This file is for the purpose of making this directory stay in the GitHub repo so
+that the image files will go into it, because I don't know of a way to add an
+empty directory to the repo.

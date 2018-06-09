@@ -140,8 +140,8 @@ struct vary_node {
 void print_knobs();
 void process_knobs();
 void first_pass();
-// struct vary_node ** second_pass();
-void second_pass();
+struct vary_node ** second_pass();
+// void second_pass(struct vary_node **);
 
 void print_pcode();
 void my_main();
