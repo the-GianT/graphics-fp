@@ -66,16 +66,18 @@
   to some default value, and print out a message
   with the name being used.
   ====================*/
-void first_pass(color *ambient) {
+size_t first_pass(color *ambient) {
   //in order to use name and num_frames throughout
   //they must be extern variables
   char varied; // acts as a boolean that tells whether vary has been called
   extern int num_frames;
+  size_t num_lights;
   extern char name[128];
   int i;
 
   varied = '\0';
   num_frames = 1;
+  num_lights = 0;
   strcpy(name, "image");
 
   for (i=0;i<lastop;i++) {
@@ -91,6 +93,7 @@ void first_pass(color *ambient) {
 	name[sizeof(name) * sizeof(char) - 1] = '\0';
 	// printf("Basename: \"%s\"\n", name);
 	// print_symtab();
+	break;
       case VARY:
 	/*
 	printf("Vary: %4.0f %4.0f, %4.0f %4.0f\n",
@@ -115,6 +118,14 @@ void first_pass(color *ambient) {
 	// printf("ambient->red: %d\n", ambient->red);
 	// printf("ambient->green: %d\n", ambient->green);
 	// printf("ambient->blue: %d\n", ambient->blue);
+	break;
+      case LIGHT:
+	printf("Light: %s at: %6.2f %6.2f %6.2f\n",
+		   op[i].op.light.p->name,
+		   op[i].op.light.c[0], op[i].op.light.c[1],
+		   op[i].op.light.c[2]);
+	num_lights++;
+	break;
       }
   }
   if (varied && num_frames <= 1) {
@@ -271,10 +282,10 @@ void my_main() {
   color g;
   double step_3d = 20;
   double theta;
+  size_t num_lights; // number of point light sources
 
   //Lighting values here for easy access
   color *ambient;
-  double light[2][3];
   double view[3];
   double areflect[3];
   double dreflect[3];
@@ -288,14 +299,6 @@ void my_main() {
   ambient->red = 50;
   ambient->green = 50;
   ambient->blue = 50;
-
-  light[LOCATION][0] = 0.5;
-  light[LOCATION][1] = 0.75;
-  light[LOCATION][2] = 1;
-
-  light[COLOR][RED] = 0;
-  light[COLOR][GREEN] = 255;
-  light[COLOR][BLUE] = 255;
 
   view[0] = 0;
   view[1] = 0;
@@ -321,7 +324,26 @@ void my_main() {
   g.green = 0;
   g.blue = 0;
 
-  first_pass(ambient);
+  /*
+    number of lights is counted in first_pass and used to allocate appropriate
+    amount of memory
+  */
+  num_lights = first_pass(ambient);
+  printf("num_lights: %lu\n", num_lights);
+  double light[num_lights][2][3];
+
+  /*
+    Default point light source (will be overwritten if light command is called
+    at least once):
+  */
+  light[0][LOCATION][0] = 0.5;
+  light[0][LOCATION][1] = 0.75;
+  light[0][LOCATION][2] = 1;
+
+  light[0][COLOR][RED] = 0;
+  light[0][COLOR][GREEN] = 255;
+  light[0][COLOR][BLUE] = 255;
+  
   vary = second_pass();
   // printf("vary[0]->name: \"%s\"\n", vary[0]->name);
 
