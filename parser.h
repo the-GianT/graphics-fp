@@ -3,6 +3,7 @@
 
 #include "symtab.h"
 #include "matrix.h"
+#include "ml6.h"
 
 #define MAX_COMMANDS 512
 
@@ -140,7 +141,7 @@ struct vary_node {
 void print_knobs();
 void process_knobs();
 // void first_pass();
-size_t first_pass();
+size_t first_pass(color *);
 struct vary_node ** second_pass();
 // void second_pass(struct vary_node **);
 
