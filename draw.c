@@ -742,6 +742,11 @@ struct matrix * parse_mesh(char * filename){
     }
     if (!strncmp(line, "v", 1)){
       sscanf(line, "%c %lf %lf %lf", &ve, &vertices[vert][0], &vertices[vert][1], &vertices[vert][2]);
+      /*
+      printf("vertices[vert][0]: %lf\n", vertices[vert][0]);
+      printf("vertices[vert][1]: %lf\n", vertices[vert][1]);
+      printf("vertices[vert][2]: %lf\n", vertices[vert][2]);
+      */
       vert++;
     }
     if (!strncmp(line, "f", 1)){
@@ -754,10 +759,12 @@ struct matrix * parse_mesh(char * filename){
 	num_args++;
       }
       for (i = 2; i < num_args - 1; i++){
+	/*
 	int arg1, argi, argi1;
 	arg1 = args[1] % num_vertices;
 	argi = args[i] % num_vertices;
 	argi1 = args[i + 1] % num_vertices;
+	*/
 	
 	add_polygon(polygons, vertices[args[1]][0], vertices[args[1]][1], vertices[args[1]][2],
 		    vertices[args[i]][0], vertices[args[i]][1], vertices[args[i]][2],
@@ -774,8 +781,10 @@ struct matrix * parse_mesh(char * filename){
     }
   }
   fclose(f);
+  /*
   for (i = 0; i < polygons->lastcol; i++) {
     printf("x-val: %lf\n", polygons->m[0][i]);
   }
+  */
   return polygons;
 }
