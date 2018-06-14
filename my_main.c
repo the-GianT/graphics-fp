@@ -125,7 +125,7 @@ size_t first_pass(color *ambient) {
 		   op[i].op.light.c[0], op[i].op.light.c[1],
 		   op[i].op.light.c[2]);
 	num_lights++;
-	printf("num_lights: %lu\n", num_lights);
+	// printf("num_lights: %lu\n", num_lights);
 	break;
       }
   }
@@ -373,10 +373,12 @@ void my_main() {
 	switch (op[i].opcode)
 	  {
 	  case LIGHT:
+	    /*
 	    printf("Light: %s at: %6.2f %6.2f %6.2f\n",
 		   op[i].op.light.p->name,
 		   op[i].op.light.c[0], op[i].op.light.c[1],
 		   op[i].op.light.c[2]);
+	    */
 	    break;
 
 	  case CONSTANTS:
