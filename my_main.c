@@ -535,11 +535,12 @@ void my_main() {
 	    tmp->lastcol = 0;
 	    break;
 	  case MESH:
-	    printf("Mesh: filename: %s",op[i].op.mesh.name);
-	    if (op[i].op.mesh.constants != NULL)
-	      {
-		printf("\tconstants: %s\n",op[i].op.mesh.constants->name);
-	      }
+	    tmp = parse_mesh(op[i].op.mesh.name);
+	    matrix_mult(peek(systems), tmp);
+	    draw_polygons(tmp, t, zb,
+			  view, light, *ambient, areflect, dreflect, sreflect,
+			  num_lights);
+	    tmp->lastcol = 0;
 	    break;
 	  case SET:
 	    printf("Set: %s %6.2f\n",

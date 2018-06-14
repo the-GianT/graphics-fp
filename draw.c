@@ -710,3 +710,51 @@ void draw_line(int x0, int y0, double z0,
   } //end drawing loop
   plot( s, zb, c, x1, y1, z );
 } //end draw_line
+
+struct matrix * parse_mesh(char * filename){
+  FILE * f;
+  int num_vertices, num_faces, i, num_args, vert;
+  char line[256];
+  char v;
+  struct matrix * polygons = new_matrix(4, 4);
+  
+  f = fopen(filename, "r");
+  while (fgets(line, sizeof(line), f)){
+    if (!strncmp(line, "v", 1)){
+      num_vertices++;
+    }
+    if (!strncmp(line, "f", 1)){
+      num_faces++;
+    }
+  }
+  fclose(f);
+  
+  double vertices[num_vertices + 1][3];
+  vert = 1;
+  
+  f = fopen(filename, "r");
+  while (fgets(line, sizeof(line), f)){
+    if (line[strlen(line) - 1] == '\n'){
+      line[strlen(line) - 1] = '\0';
+    }
+    if (!strncmp(line, "v", 1)){
+      sscanf(line, "%c %lf %lf %lf", v, vertices[vert][0], vertices[vert][1], vertices[vert][2]);
+      vert++;
+    }
+    if (!strncmp(line, "f", 1)){
+      int args[100];
+      num_args = 0;
+      while (line){
+	args[num_args] = atoi(strsep(&line, " "));
+	num_args++;
+      }
+      for (i = 2; i < num_args - 1; i++){
+	add_polygon(polygons, vertices[args[1]][0], vertices[args[1]][1], vertices[args[1]][2],
+		    vertices[args[i]][0], vertices[args[i]][1], vertices[args[i]][2],
+		    vertices[args[i + 1]][0], vertices[args[i + 1]][1], vertices[args[i + 1]][2]);
+      }
+    }
+  }
+  fclose(f);
+  return polygons;
+}
