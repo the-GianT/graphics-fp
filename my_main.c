@@ -389,8 +389,18 @@ void my_main() {
 	switch (op[i].opcode)
 	  {
 	  case CONSTANTS:
-	    printf("Constants: %s\n",op[i].op.constants.p->name);
-	    break;
+	    areflect[RED] = op[i].op.constants.p->s.c->r[0];
+	    areflect[GREEN] = op[i].op.constants.p->s.c->g[0];  
+	    areflect[BLUE] = op[i].op.constants.p->s.c->b[0];  
+
+	    dreflect[RED] = op[i].op.constants.p->s.c->r[1];  
+	    dreflect[GREEN] = op[i].op.constants.p->s.c->g[1]; 
+	    dreflect[BLUE] = op[i].op.constants.p->s.c->b[1]; 
+	    
+	    sreflect[RED] = op[i].op.constants.p->s.c->r[2]; 
+	    sreflect[GREEN] = op[i].op.constants.p->s.c->g[2]; 
+	    sreflect[BLUE] = op[i].op.constants.p->s.c->b[2];
+            break;      
 	  case SAVE_COORDS:
 	    printf("Save Coords: %s\n",op[i].op.save_coordinate_system.p->name);
 	    break;
