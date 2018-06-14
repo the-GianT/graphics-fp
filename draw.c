@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <string.h>
 
 #include "ml6.h"
 #include "display.h"
@@ -714,8 +715,8 @@ void draw_line(int x0, int y0, double z0,
 struct matrix * parse_mesh(char * filename){
   FILE * f;
   int num_vertices, num_faces, i, num_args, vert;
-  char line[256];
-  char v;
+  char * line;
+  char ve;
   struct matrix * polygons = new_matrix(4, 4);
   
   f = fopen(filename, "r");
@@ -738,7 +739,7 @@ struct matrix * parse_mesh(char * filename){
       line[strlen(line) - 1] = '\0';
     }
     if (!strncmp(line, "v", 1)){
-      sscanf(line, "%c %lf %lf %lf", v, vertices[vert][0], vertices[vert][1], vertices[vert][2]);
+      sscanf(line, "%c %lf %lf %lf", &ve, &vertices[vert][0], &vertices[vert][1], &vertices[vert][2]);
       vert++;
     }
     if (!strncmp(line, "f", 1)){
