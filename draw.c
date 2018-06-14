@@ -758,23 +758,24 @@ struct matrix * parse_mesh(char * filename){
 	arg1 = args[1] % num_vertices;
 	argi = args[i] % num_vertices;
 	argi1 = args[i + 1] % num_vertices;
-	/*
+	
 	add_polygon(polygons, vertices[args[1]][0], vertices[args[1]][1], vertices[args[1]][2],
 		    vertices[args[i]][0], vertices[args[i]][1], vertices[args[i]][2],
 		    vertices[args[i + 1]][0], vertices[args[i + 1]][1], vertices[args[i + 1]][2]);
-	*/
+	/*
 	add_polygon(polygons, vertices[arg1][0], vertices[arg1][1],
 		    vertices[arg1][2],
 		    vertices[argi][0], vertices[argi][1],
 		    vertices[argi][2],
 		    vertices[argi1][0], vertices[argi1][1],
 		    vertices[argi1][2]);
+	*/
       }
     }
   }
   fclose(f);
   for (i = 0; i < polygons->lastcol; i++) {
-    printf("x-val: %d\n", polygons->m[0][i]);
+    printf("x-val: %lf\n", polygons->m[0][i]);
   }
   return polygons;
 }
