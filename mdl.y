@@ -568,33 +568,6 @@ LIGHT STRING DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
   lastop++;
 }|
 
-CONSTANTS DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
-{
-  lineno++;
-  c = (struct constants *)malloc(sizeof(struct constants));
-  c->r[0]=$3;
-  c->r[1]=$4;
-  c->r[2]=$5;
-  c->r[3]=0;
-
-  c->g[0]=$6;
-  c->g[1]=$7;
-  c->g[2]=$8;
-  c->g[3]=0;
-
-  c->b[0]=$9;
-  c->b[1]=$10;
-  c->b[2]=$11;
-  c->b[3]=0;
-
-  c->red = 0;
-  c->green = 0;
-  c->blue = 0;
-
-  op[lastop].opcode=CONSTANTS;
-  lastop++;
-}|
-
 CONSTANTS STRING DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
 {
   lineno++;

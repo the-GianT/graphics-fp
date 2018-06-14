@@ -143,7 +143,7 @@ void print_knobs();
 void process_knobs();
 // void first_pass();
 size_t first_pass(color *);
-struct vary_node ** second_pass();
+struct vary_node ** second_pass(double light[][2][3]);
 // void second_pass(struct vary_node **);
 
 void print_pcode();

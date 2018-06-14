@@ -106,12 +106,13 @@ size_t first_pass(color *ambient) {
 	// printf("varied: %c\n", varied);
 	break;
       case AMBIENT:
-	    
+	/*
 	printf("Ambient: %6.2f %6.2f %6.2f\n",
 	       op[i].op.ambient.c[0],
 	       op[i].op.ambient.c[1],
 	       op[i].op.ambient.c[2]);
 	printf("op[i].op.ambient.c[3]: %lf\n", op[i].op.ambient.c[3]);
+	*/
 	    
 	ambient->red = op[i].op.ambient.c[0];
 	ambient->green = op[i].op.ambient.c[1];
@@ -160,13 +161,15 @@ size_t first_pass(color *ambient) {
   vary_node corresponding to the given knob with the
   appropirate value.
   ====================*/
-struct vary_node ** second_pass() {
+struct vary_node ** second_pass(double light[][2][3]) {
 // void second_pass(struct vary_node ** vary)
 // {
   struct vary_node **vary;
   int i, j;
+  size_t cur_light; // which light we are up to for adding to the light array
   
   vary = (struct vary_node **)calloc(num_frames, sizeof(struct vary_node *));
+  cur_light = 0;
 
   /*
   // initialize all frames to null
@@ -218,16 +221,27 @@ struct vary_node ** second_pass() {
 	vary[j] = new;
 	break;
       case LIGHT:
+	/*
 	printf("Light: %s at: %6.2f %6.2f %6.2f\n",
 	       op[i].op.light.p->name,
 	       op[i].op.light.c[0], op[i].op.light.c[1],
 	       op[i].op.light.c[2]);
+	*/
 	/*
 	  light[cur_light][LOCATION][0] = op[i].op.light.c[0];
 	  light[cur_light][LOCATION][1] = op[i].op.light.c[1];
 	  light[cur_light][LOCATION][2] = op[i].op.light.c[2];
 	  light[cur_light][COLOR][RED] = 
 	*/
+	light[cur_light][COLOR][RED] = op[i].op.light.c[0];
+	light[cur_light][COLOR][GREEN] = op[i].op.light.c[1];
+	light[cur_light][COLOR][BLUE] = op[i].op.light.c[2];
+	
+	light[cur_light][LOCATION][0] = op[i].op.light.l[0];
+	light[cur_light][LOCATION][1] = op[i].op.light.l[1];
+	light[cur_light][LOCATION][2] = op[i].op.light.l[2];
+	
+	cur_light++;
 	break;
       }
   }
@@ -302,7 +316,6 @@ void my_main() {
   double step_3d = 20;
   double theta;
   size_t num_lights; // number of point light sources
-  size_t cur_light; // which light we are up to for adding to the light array
 
   //Lighting values here for easy access
   color *ambient;
@@ -349,7 +362,7 @@ void my_main() {
     amount of memory
   */
   num_lights = first_pass(ambient);
-  printf("num_lights: %lu\n", num_lights);
+  // printf("num_lights: %lu\n", num_lights);
   if (!num_lights){
     num_lights = 1;
   }
@@ -365,9 +378,8 @@ void my_main() {
   light[0][COLOR][RED] = 0;
   light[0][COLOR][GREEN] = 255;
   light[0][COLOR][BLUE] = 255;
-  cur_light = 0;
   
-  vary = second_pass();
+  vary = second_pass(light);
   // printf("vary[0]->name: \"%s\"\n", vary[0]->name);
 
   for (j = 0; j < num_frames; j++) {
@@ -402,7 +414,7 @@ void my_main() {
 	    sreflect[RED] = op[i].op.constants.p->s.c->r[2]; 
 	    sreflect[GREEN] = op[i].op.constants.p->s.c->g[2]; 
 	    sreflect[BLUE] = op[i].op.constants.p->s.c->b[2];
-            break;      
+            break;
 	  case SAVE_COORDS:
 	    printf("Save Coords: %s\n",op[i].op.save_coordinate_system.p->name);
 	    break;
