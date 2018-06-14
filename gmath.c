@@ -7,11 +7,14 @@
 #include "ml6.h"
 
 //lighting functions
-color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect) {
-
+color get_lighting( double *normal, double *view, color alight, double light[][2][3], double *areflect, double *dreflect, double *sreflect, size_t num_lights)
+{
   color a, d, s, i;
+  int i;
+  
   normalize(normal);
 
+  for (i = 0; i < num_lights)
   a = calculate_ambient( alight, areflect );
   d = calculate_diffuse( light, dreflect, normal );
   s = calculate_specular( light, sreflect, view, normal );
