@@ -730,6 +730,7 @@ struct matrix * parse_mesh(char * filename){
   }
   fclose(f);
   
+  
   double vertices[num_vertices + 1][3];
   vert = 1;
   

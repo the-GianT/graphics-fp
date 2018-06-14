@@ -3,11 +3,12 @@ CFLAGS= -g
 LDFLAGS= -lm
 CC= gcc
 
-all: parser
 
 run: all
 	./mdl simple_anim.mdl
 	animate -delay 3 anim/simple*
+
+all: parser
 
 parser: lex.yy.c y.tab.c y.tab.h $(OBJECTS)
 	gcc -o mdl $(CFLAGS) lex.yy.c y.tab.c $(OBJECTS) $(LDFLAGS)
