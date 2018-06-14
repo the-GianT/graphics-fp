@@ -125,6 +125,7 @@ size_t first_pass(color *ambient) {
 		   op[i].op.light.c[0], op[i].op.light.c[1],
 		   op[i].op.light.c[2]);
 	num_lights++;
+	printf("num_lights: %lu\n", num_lights);
 	break;
       }
   }
@@ -132,6 +133,7 @@ size_t first_pass(color *ambient) {
     printf("Error: You called vary but did not set multiple frames.\n");
     exit(EXIT_FAILURE);
   }
+  return num_lights;
 }
 
 /*======== struct vary_node ** second_pass() ==========
