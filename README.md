@@ -6,3 +6,11 @@ Graphics engine as final project for Mr. DW's computer graphics class (period 5)
  * Changing/adding multiple lights (light light1 255 0 0 0.5 .75 1)
  * Changing the reflection constants for all future objects (constants cons .1 .5 .7 .1 .5 .7 .1 .5 .7)
  * Mesh (mesh :pyramid.obj)
+
+Typing `make` in the terminal will generate an animation with al.mdl. There are
+other targets in the makefile that allow one to use some of the other mdl
+scripts we have included. The terminal commands for these are as follows:
+* `make scrape`
+* `make pyramid`
+* `make simple`
+* `make robot`

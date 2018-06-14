@@ -4,9 +4,24 @@ LDFLAGS= -lm
 CC= gcc
 
 
-run: all
+al: all
+	./mdl al.mdl
+	animate -delay 3 anim/al*
+
+scrape: all
+	./mdl scrape.mdl
+	animate -delay 3 anim/scrape*
+
+pyramid: all
+	./mdl pyramid.mdl
+	animate -delay 3 anim/pyramid*
+
+simple: all
 	./mdl simple_anim.mdl
 	animate -delay 3 anim/simple*
+
+robot: all
+	./mdl robot.mdl
 
 all: parser
 
@@ -50,4 +65,5 @@ clean:
 	rm y.tab.c y.tab.h
 	rm lex.yy.c
 	rm -rf mdl.dSYM
+	rm anim/*.png
 	rm *.o *~

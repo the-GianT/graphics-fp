@@ -382,13 +382,14 @@ void my_main() {
   vary = second_pass(light);
   // printf("vary[0]->name: \"%s\"\n", vary[0]->name);
 
+  printf("Generating frames...\n");
+
   for (j = 0; j < num_frames; j++) {
 
-    // Set knob values in symbol table
     char framename[135]; // name for the png image containing this frame
 
+    // Set knob values in symbol table
     dummy = vary[j];
-    
     while (dummy) {
       // print_symtab();
       // printf("dummy->name: \"%s\"\n", dummy->name);
