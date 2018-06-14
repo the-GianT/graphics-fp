@@ -106,10 +106,12 @@ size_t first_pass() {
 	// printf("varied: %c\n", varied);
 	break;
       case LIGHT:
+	/*
 	printf("Light: %s at: %6.2f %6.2f %6.2f\n",
 		   op[i].op.light.p->name,
 		   op[i].op.light.c[0], op[i].op.light.c[1],
 		   op[i].op.light.c[2]);
+	*/
 	num_lights++;
 	// printf("num_lights: %lu\n", num_lights);
 	break;
@@ -271,6 +273,7 @@ void my_main() {
   double step_3d = 20;
   double theta;
   size_t num_lights; // number of point light sources
+  size_t cur_light; // which light we are up to for adding to the light array
 
   //Lighting values here for easy access
   color ambient;
@@ -329,10 +332,10 @@ void my_main() {
   light[0][LOCATION][0] = 0.5;
   light[0][LOCATION][1] = 0.75;
   light[0][LOCATION][2] = 1;
-
   light[0][COLOR][RED] = 0;
   light[0][COLOR][GREEN] = 255;
   light[0][COLOR][BLUE] = 255;
+  cur_light = 0;
   
   vary = second_pass();
   // printf("vary[0]->name: \"%s\"\n", vary[0]->name);
@@ -358,11 +361,15 @@ void my_main() {
 	switch (op[i].opcode)
 	  {
 	  case LIGHT:
-	    /*
 	    printf("Light: %s at: %6.2f %6.2f %6.2f\n",
 		   op[i].op.light.p->name,
 		   op[i].op.light.c[0], op[i].op.light.c[1],
 		   op[i].op.light.c[2]);
+	    /*
+	    light[cur_light][LOCATION][0] = op[i].op.light.c[0];
+	    light[cur_light][LOCATION][1] = op[i].op.light.c[1];
+	    light[cur_light][LOCATION][2] = op[i].op.light.c[2];
+	    light[cur_light][COLOR][RED] = 
 	    */
 	    break;
 
@@ -400,7 +407,8 @@ void my_main() {
 		       op[i].op.sphere.r, step_3d);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, ambient, areflect, dreflect, sreflect);
+			  view, light, ambient, areflect, dreflect, sreflect,
+			  num_lights);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -424,7 +432,8 @@ void my_main() {
 		      op[i].op.torus.r0, op[i].op.torus.r1, step_3d);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, ambient, areflect, dreflect, sreflect);
+			  view, light, ambient, areflect, dreflect, sreflect,
+			  num_lights);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -453,7 +462,8 @@ void my_main() {
 		    op[i].op.box.d1[2]);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, ambient, areflect, dreflect, sreflect);
+			  view, light, ambient, areflect, dreflect, sreflect,
+			  num_lights);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -574,12 +584,13 @@ void my_main() {
 	    free_matrix(trans);
 	    break;
 	  case AMBIENT:
-	    /*
+	    
 	      printf("Ambient: %6.2f %6.2f %6.2f\n",
 	      op[i].op.ambient.c[0],
 	      op[i].op.ambient.c[1],
 	      op[i].op.ambient.c[2]);
-	    */
+	      printf("op[i].op.ambient.c[3]: %lf\n", op[i].op.ambient.c[3]);
+	    
 	    ambient.red = op[i].op.ambient.c[0];
 	    ambient.green = op[i].op.ambient.c[1];
 	    ambient.blue = op[i].op.ambient.c[2];

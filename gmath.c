@@ -9,19 +9,37 @@
 //lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[][2][3], double *areflect, double *dreflect, double *sreflect, size_t num_lights)
 {
-  color a, d, s, i;
-  int i;
+  color /* a, */ d, s, i;
+  size_t j;
+
+  i = calculate_ambient( alight, areflect );
+
+  /*
+  i.red = 0;
+  i.green = 0;
+  i.blue = 0;
+  */
   
   normalize(normal);
 
-  for (i = 0; i < num_lights)
-  a = calculate_ambient( alight, areflect );
-  d = calculate_diffuse( light, dreflect, normal );
-  s = calculate_specular( light, sreflect, view, normal );
+  for (j = 0; j < num_lights; j++) {
+    // printf("j: %lu\n", j);
+    d = calculate_diffuse( light[j], dreflect, normal );
+    s = calculate_specular( light[j], sreflect, view, normal );
 
-  i.red = a.red + d.red + s.red;
-  i.green = a.green + d.green + s.green;
-  i.blue = a.blue + d.blue + s.blue;
+    /*
+    printf("d.red: %d\n", d.red);
+    printf("d.green: %d\n", d.green);
+    printf("d.blue: %d\n", d.blue);
+    printf("s.red: %d\n", s.red);
+    printf("s.green: %d\n", s.green);
+    printf("s.blue: %d\n", s.blue);
+    */
+
+    i.red += /* a.red + */ d.red + s.red;
+    i.green += /* a.green + */ d.green + s.green;
+    i.blue += /* a.blue + */ d.blue + s.blue;
+  }
 
   limit_color(&i);
   return i;
@@ -44,7 +62,18 @@ color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
   lvector[0] = light[LOCATION][0];
   lvector[1] = light[LOCATION][1];
   lvector[2] = light[LOCATION][2];
+  /*
+  printf("lvector[0]: %lf\n", lvector[0]);
+  printf("lvector[1]: %lf\n", lvector[1]);
+  printf("lvector[2]: %lf\n", lvector[2]);
+  */
+  
   normalize(lvector);
+  /*
+  printf("lvector[0]: %lf\n", lvector[0]);
+  printf("lvector[1]: %lf\n", lvector[1]);
+  printf("lvector[2]: %lf\n", lvector[2]);
+  */
 
   dot = dot_product(normal, lvector);
 

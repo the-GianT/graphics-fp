@@ -153,7 +153,7 @@ void draw_polygons(struct matrix *polygons, screen s, zbuffer zb,
                    double *areflect,
                    double *dreflect,
                    double *sreflect,
-		   size_t numlights) {
+		   size_t num_lights) {
   if ( polygons->lastcol < 3 ) {
     printf("Need at least 3 points to draw a polygon!\n");
     return;
