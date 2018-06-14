@@ -750,6 +750,7 @@ struct matrix * parse_mesh(char * filename){
       char * liner = &line[0];
       while (liner){
 	args[num_args] = atoi(strsep(&liner, " "));
+	//	printf("%d\n", args[num_args]);
 	num_args++;
       }
       for (i = 2; i < num_args - 1; i++){
@@ -773,7 +774,7 @@ struct matrix * parse_mesh(char * filename){
   }
   fclose(f);
   for (i = 0; i < polygons->lastcol; i++) {
-    printf("x-val: %d\n", polygons->m[i][0]);
+    printf("x-val: %d\n", polygons->m[0][i]);
   }
   return polygons;
 }
