@@ -535,6 +535,7 @@ void my_main() {
 	    tmp->lastcol = 0;
 	    break;
 	  case MESH:
+	    free_matrix(tmp);
 	    tmp = parse_mesh(op[i].op.mesh.name);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
