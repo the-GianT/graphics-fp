@@ -750,6 +750,7 @@ struct matrix * parse_mesh(char * filename){
       char * liner = &line[0];
       while (liner){
 	args[num_args] = atoi(strsep(&liner, " "));
+	//	printf("%d\n", args[num_args]);
 	num_args++;
       }
       for (i = 2; i < num_args - 1; i++){
