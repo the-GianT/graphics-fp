@@ -21,10 +21,11 @@ struct command
   {
     struct {
       SYMTAB *p;
-      double c[4];
+      double c[3];
+      double l[4];
     } light;
     struct {
-      double c[4];
+      double c[3];
     } ambient;
     struct {
       SYMTAB *p;

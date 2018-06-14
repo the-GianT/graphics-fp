@@ -98,9 +98,9 @@ setknobs value		- set all the knobs to value
 
 Lighting
 --------
-light r g b x y z  	- creates a "light" datastructure with rgb values
+light lname r g b x y z  - creates a "light" datastructure with rgb values
 			  r,g,b at location x,y,z.
-			  This is inserted into the symbol table.
+			  This is inserted into the symbol table with name lname.
 
 ambient r g b 		- specifies how much ambient light is in the scene
 

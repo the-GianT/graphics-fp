@@ -122,10 +122,12 @@ size_t first_pass(color *ambient) {
 	break;
       case LIGHT:
 	/*
-	printf("Light: %s at: %6.2f %6.2f %6.2f\n",
-		   op[i].op.light.p->name,
-		   op[i].op.light.c[0], op[i].op.light.c[1],
-		   op[i].op.light.c[2]);
+	printf("Light: %s colors: %lf %lf %lf at: %6.2f %6.2f %6.2f\n",
+	       op[i].op.light.p->name,
+	       op[i].op.light.c[0], op[i].op.light.c[1],
+	       op[i].op.light.c[2],
+	       op[i].op.light.l[0], op[i].op.light.l[1],
+	       op[i].op.light.l[2]);
 	*/
 	num_lights++;
 	// printf("num_lights: %lu\n", num_lights);
