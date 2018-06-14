@@ -330,6 +330,9 @@ void my_main() {
   */
   num_lights = first_pass(ambient);
   printf("num_lights: %lu\n", num_lights);
+  if (!num_lights){
+    num_lights = 1;
+  }
   double light[num_lights][2][3];
 
   /*
