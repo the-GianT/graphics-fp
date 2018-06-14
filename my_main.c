@@ -66,7 +66,7 @@
   to some default value, and print out a message
   with the name being used.
   ====================*/
-size_t first_pass(color *ambient) {
+size_t first_pass() {
   //in order to use name and num_frames throughout
   //they must be extern variables
   char varied; // acts as a boolean that tells whether vary has been called
@@ -104,20 +104,6 @@ size_t first_pass(color *ambient) {
 	*/
 	varied = 't'; // set to true
 	// printf("varied: %c\n", varied);
-	break;
-      case AMBIENT:
-	/*
-	printf("Ambient: %6.2f %6.2f %6.2f\n",
-	       op[i].op.ambient.c[0],
-	       op[i].op.ambient.c[1],
-	       op[i].op.ambient.c[2]);
-	*/
-	ambient->red = op[i].op.ambient.c[0];
-	ambient->green = op[i].op.ambient.c[1];
-	ambient->blue = op[i].op.ambient.c[2];
-	// printf("ambient->red: %d\n", ambient->red);
-	// printf("ambient->green: %d\n", ambient->green);
-	// printf("ambient->blue: %d\n", ambient->blue);
 	break;
       case LIGHT:
 	printf("Light: %s at: %6.2f %6.2f %6.2f\n",
@@ -287,7 +273,7 @@ void my_main() {
   size_t num_lights; // number of point light sources
 
   //Lighting values here for easy access
-  color *ambient;
+  color ambient;
   double view[3];
   double areflect[3];
   double dreflect[3];
@@ -297,10 +283,9 @@ void my_main() {
   struct vary_node **vary;
   struct vary_node *dummy;
 
-  ambient = (color *)malloc(sizeof(color) * 1);
-  ambient->red = 50;
-  ambient->green = 50;
-  ambient->blue = 50;
+  ambient.red = 50;
+  ambient.green = 50;
+  ambient.blue = 50;
 
   view[0] = 0;
   view[1] = 0;
@@ -330,7 +315,7 @@ void my_main() {
     number of lights is counted in first_pass and used to allocate appropriate
     amount of memory
   */
-  num_lights = first_pass(ambient);
+  num_lights = first_pass();
   printf("num_lights: %lu\n", num_lights);
   if (!num_lights){
     num_lights = 1;
@@ -415,7 +400,7 @@ void my_main() {
 		       op[i].op.sphere.r, step_3d);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, *ambient, areflect, dreflect, sreflect);
+			  view, light, ambient, areflect, dreflect, sreflect);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -439,7 +424,7 @@ void my_main() {
 		      op[i].op.torus.r0, op[i].op.torus.r1, step_3d);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, *ambient, areflect, dreflect, sreflect);
+			  view, light, ambient, areflect, dreflect, sreflect);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -468,7 +453,7 @@ void my_main() {
 		    op[i].op.box.d1[2]);
 	    matrix_mult(peek(systems), tmp);
 	    draw_polygons(tmp, t, zb,
-			  view, light, *ambient, areflect, dreflect, sreflect);
+			  view, light, ambient, areflect, dreflect, sreflect);
 	    tmp->lastcol = 0;
 
 	    break;
@@ -588,6 +573,20 @@ void my_main() {
 	    copy_matrix(trans, peek(systems));
 	    free_matrix(trans);
 	    break;
+	  case AMBIENT:
+	    /*
+	      printf("Ambient: %6.2f %6.2f %6.2f\n",
+	      op[i].op.ambient.c[0],
+	      op[i].op.ambient.c[1],
+	      op[i].op.ambient.c[2]);
+	    */
+	    ambient.red = op[i].op.ambient.c[0];
+	    ambient.green = op[i].op.ambient.c[1];
+	    ambient.blue = op[i].op.ambient.c[2];
+	    // printf("ambient->red: %d\n", ambient->red);
+	    // printf("ambient->green: %d\n", ambient->green);
+	    // printf("ambient->blue: %d\n", ambient->blue);
+	    break;
 	  case SAVE_KNOBS:
 	    printf("Save knobs: %s\n",op[i].op.save_knobs.p->name);
 	    break;
@@ -636,7 +635,6 @@ void my_main() {
   }
   free_matrix(tmp);
   free_stack(systems);
-  free(ambient);
 
   // Free all the nodes in the knob table
   for (j = 0; j < num_frames; j++) {
